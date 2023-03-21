@@ -32,6 +32,8 @@ Renderer::Renderer(const std::size_t screen_width,
     std::cerr << "Renderer could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
+
+
 }
 
 Renderer::~Renderer() {
@@ -39,23 +41,24 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Player const player) {
-
+void Renderer::Render(const Player& player, const std::vector<std::pair<SDL_Point, SDL_Point>>& lines) {
 
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
   SDL_RenderClear(sdl_renderer);
 
-  // Render enemies
-  //SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
-  //SDL_RenderFillRect(sdl_renderer, &block);
+  // Render Lines
+  SDL_SetRenderDrawColor(sdl_renderer, 255, 255, 255, 255);
+  for(const auto& line : lines){
+    SDL_RenderDrawLine(sdl_renderer, line.first.x, line.first.y, line.second.x, line.second.y);
+  }
 
   // Render player body
-  
-  Renderer::DrawCircle(player.GetX(), player.GetY(),player.GetRadius(), player.GetColor());
+  DrawCircle(player.GetX(), player.GetY(), player.GetRadius(), {255, 0, 0, 255});
+
 
   // Update Screen
-  //SDL_RenderPresent(sdl_renderer);
+  SDL_RenderPresent(sdl_renderer);
 }
 
 void Renderer::DrawCircle(int x, int y, int radius, SDL_Color color) {
@@ -70,6 +73,7 @@ void Renderer::DrawCircle(int x, int y, int radius, SDL_Color color) {
     }
   }
 }
+
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
   std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};

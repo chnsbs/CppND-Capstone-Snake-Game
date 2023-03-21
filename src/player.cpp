@@ -1,4 +1,5 @@
 #include "player.h"
+#include "SDL.h"
 
 Player::Player(int x, int y) : x(x), y(y) {}
 
@@ -11,8 +12,8 @@ void Player::SetY(int y) {
 }
 
 void Player::Update() {
-  x += dx;
-  y += dy;
+//   x += dx;
+//   y += dy;
 }
 
 int Player::GetX() const {
@@ -25,4 +26,8 @@ int Player::GetY() const {
 
 int Player::GetRadius() const {
   return radius;
+}
+
+SDL_Color Player::GetColor() const {
+  return color;
 }

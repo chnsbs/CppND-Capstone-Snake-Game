@@ -2,10 +2,20 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t playfield_width, std::size_t playfield_height)
-    : player(playfield_width/2, playfield_height),
+Game::Game(const std::size_t screen_width, const std::size_t screen_height, const std::size_t kPlayfieldWidth, const std::size_t kPlayfieldHeight)
+    : player(0, 0),
       engine(dev()) {
-  //PlaceFood();
+        int padding = (int(screen_width) - int(kPlayfieldWidth))/2;
+        SDL_Point startPoint1 = {0 + padding, 0 + padding};
+        SDL_Point startPoint2 = {startPoint1.x + int(kPlayfieldWidth), startPoint1.y };
+        SDL_Point startPoint3 = {startPoint1.x + int(kPlayfieldWidth), startPoint1.y + int(kPlayfieldHeight)};
+        SDL_Point startPoint4 = {0 + padding, startPoint1.y + int(kPlayfieldHeight)};
+
+        // Add game field edges
+        lines.push_back({startPoint1,startPoint2});
+        lines.push_back({startPoint2,startPoint3});
+        lines.push_back({startPoint3,startPoint4});
+        lines.push_back({startPoint4,startPoint1});
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -23,7 +33,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, player);
     Update();
-    renderer.Render(player);
+    renderer.Render(player, lines);
 
     frame_end = SDL_GetTicks();
 
@@ -48,37 +58,12 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
-// void Game::PlaceFood() {
-//   int x, y;
-//   while (true) {
-//     x = random_w(engine);
-//     y = random_h(engine);
-//     // Check that the location is not occupied by a snake item before placing
-//     // food.
-//     if (!snake.SnakeCell(x, y)) {
-//       food.x = x;
-//       food.y = y;
-//       return;
-//     }
-//   }
-// }
 
 void Game::Update() {
   if (!player.alive) return;
 
   player.Update();
 
-  // int new_x = static_cast<int>(snake.head_x);
-  // int new_y = static_cast<int>(snake.head_y);
-
-  // Check if there's enemy over here
-  // if (food.x == new_x && food.y == new_y) {
-  //   score++;
-  //   //PlaceFood();
-  //   // Grow snake and increase speed.
-  //   //snake.GrowBody();
-  //   //snake.speed += 0.02;
-  // }
 }
 
 int Game::GetScore() const { return score; }
