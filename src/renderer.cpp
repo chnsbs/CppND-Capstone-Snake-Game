@@ -4,11 +4,12 @@
 
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
-                   const std::size_t grid_width, const std::size_t grid_height)
+                   const std::size_t kPlayfieldWidth, 
+                   const std::size_t kPlayfieldHeight)
     : screen_width(screen_width),
       screen_height(screen_height),
-      grid_width(grid_width),
-      grid_height(grid_height) {
+      kPlayfieldWidth(kPlayfieldWidth),
+      kPlayfieldHeight(kPlayfieldHeight){
   // Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cerr << "SDL could not initialize.\n";
@@ -16,7 +17,7 @@ Renderer::Renderer(const std::size_t screen_width,
   }
 
   // Create Window
-  sdl_window = SDL_CreateWindow("Snake Game", SDL_WINDOWPOS_CENTERED,
+  sdl_window = SDL_CreateWindow("Qix CHN", SDL_WINDOWPOS_CENTERED,
                                 SDL_WINDOWPOS_CENTERED, screen_width,
                                 screen_height, SDL_WINDOW_SHOWN);
 
@@ -38,41 +39,36 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food) {
-  SDL_Rect block;
-  block.w = screen_width / grid_width;
-  block.h = screen_height / grid_height;
+void Renderer::Render(Player const player) {
+
 
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
   SDL_RenderClear(sdl_renderer);
 
-  // Render food
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
-  block.x = food.x * block.w;
-  block.y = food.y * block.h;
-  SDL_RenderFillRect(sdl_renderer, &block);
+  // Render enemies
+  //SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
+  //SDL_RenderFillRect(sdl_renderer, &block);
 
-  // Render snake's body
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-  for (SDL_Point const &point : snake.body) {
-    block.x = point.x * block.w;
-    block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_renderer, &block);
-  }
-
-  // Render snake's head
-  block.x = static_cast<int>(snake.head_x) * block.w;
-  block.y = static_cast<int>(snake.head_y) * block.h;
-  if (snake.alive) {
-    SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
-  } else {
-    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
-  }
-  SDL_RenderFillRect(sdl_renderer, &block);
+  // Render player body
+  
+  Renderer::DrawCircle(player.GetX(), player.GetY(),player.GetRadius(), player.GetColor());
 
   // Update Screen
-  SDL_RenderPresent(sdl_renderer);
+  //SDL_RenderPresent(sdl_renderer);
+}
+
+void Renderer::DrawCircle(int x, int y, int radius, SDL_Color color) {
+  SDL_SetRenderDrawColor(sdl_renderer, color.r, color.g, color.b, color.a);
+  for (int w = 0; w < radius * 2; w++) {
+    for (int h = 0; h < radius * 2; h++) {
+      int dx = radius - w;
+      int dy = radius - h;
+      if ((dx * dx + dy * dy) <= (radius * radius)) {
+        SDL_RenderDrawPoint(sdl_renderer, x + dx, y + dy);
+      }
+    }
+  }
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
