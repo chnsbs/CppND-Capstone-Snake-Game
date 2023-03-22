@@ -56,6 +56,14 @@ void Renderer::Render(const Player& player, const std::vector<std::pair<SDL_Poin
   // Render player body
   DrawCircle(player.GetX(), player.GetY(), player.GetRadius(), {255, 0, 0, 255});
 
+  // Render player footprint
+    SDL_SetRenderDrawColor(sdl_renderer, 255, 255, 0, 255);
+    for (const auto& segment : player.GetfootPrintLineSegments()) {
+        SDL_RenderDrawLine(sdl_renderer, segment.first.x, segment.first.y, segment.second.x, segment.second.y);
+    }
+  
+
+
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);

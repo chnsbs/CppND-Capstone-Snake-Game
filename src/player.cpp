@@ -1,6 +1,7 @@
 #include "player.h"
 #include "SDL.h"
 
+
 Player::Player(const int x, const int y) : x(x), y(y) {}
 
 void Player::SetX(int x) {
@@ -59,7 +60,9 @@ bool Player::isPLayerInGameField(){
 }
 
 void Player::Update() {
+  
   if (this->isPLayerInGameField()){
+    SDL_Point start_point_ = {x,y};
     switch (direction) {
       case Direction::kUp:
         y -= speed;
@@ -79,7 +82,10 @@ void Player::Update() {
       default:
         break;
     }
+    SDL_Point end_point_ = {x,y};
+    _footPrintLineSegments.push_back(std::make_pair(start_point_, end_point_));
   }
+
 }
 
 int Player::GetX() const {
@@ -100,4 +106,8 @@ SDL_Color Player::GetColor() const {
 
 Player::Direction Player::GetDirection() const{
   return this->direction;
+} 
+
+ std::vector<std::pair<SDL_Point, SDL_Point>> Player::GetfootPrintLineSegments() const{
+  return this->_footPrintLineSegments;
 } 

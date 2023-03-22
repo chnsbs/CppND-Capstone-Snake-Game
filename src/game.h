@@ -28,7 +28,7 @@ class Game {
  private:
   GameField gameField_;
   Player player;
-  std::vector<std::pair<SDL_Point, SDL_Point>> border_lines_;
+  std::vector<std::pair<SDL_Point, SDL_Point>> lines_;
 
 
   std::random_device dev;

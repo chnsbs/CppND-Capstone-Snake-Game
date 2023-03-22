@@ -24,15 +24,15 @@ public:
   void SetGameField(int min_x, int max_x, int min_y, int max_y);
 
   // Update player
-  void Update();
+ void Update();
 
-  // Get player position
+  // Getters
   int GetX() const;
   int GetY() const;
   int GetRadius() const;
   SDL_Color GetColor() const;
-  
   Direction GetDirection() const;
+  std::vector<std::pair<SDL_Point, SDL_Point>> GetfootPrintLineSegments() const;
 
 
   bool alive{true};
@@ -46,6 +46,9 @@ private:
   Direction direction = Direction::kStop;
   bool isPLayerInGameField(); 
   SDL_Color color = {255, 0, 0, 255};
+  std::vector<std::pair<SDL_Point, SDL_Point>> _footPrintLineSegments;
+  std::vector<SDL_Point> _cornerPoints;
+
   
 ;
 };

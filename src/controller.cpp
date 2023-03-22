@@ -2,9 +2,17 @@
 #include <iostream>
 #include "SDL.h"
 #include "player.h"
+#include "logger.h"
 
 void Controller::ChangeDirection(Player &player, Player::Direction input) const {
-  player.SetDirection(input);
+  if(player.GetDirection() != input){
+    player.SetDirection(input);
+    Logger::log(LogLevel::Info, "Player turned. Add a Point?");
+  }else{
+    
+  }
+  
+
   return;
 }
 
