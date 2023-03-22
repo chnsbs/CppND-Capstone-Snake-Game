@@ -62,6 +62,7 @@ void Renderer::Render(const Player& player, const std::vector<std::pair<SDL_Poin
         SDL_RenderDrawLine(sdl_renderer, segment.first.x, segment.first.y, segment.second.x, segment.second.y);
     }
   
+  // Render drawed 
 
 
 
