@@ -12,11 +12,20 @@ Game::Game(const std::size_t screen_width, const std::size_t screen_height, cons
         SDL_Point startPoint4 = {0 + padding, startPoint1.y + int(kPlayfieldHeight)};
 
         // Add game field edges
-        lines.push_back({startPoint1,startPoint2});
-        lines.push_back({startPoint2,startPoint3});
-        lines.push_back({startPoint3,startPoint4});
-        lines.push_back({startPoint4,startPoint1});
+        border_lines_.push_back({startPoint1,startPoint2});
+        border_lines_.push_back({startPoint2,startPoint3});
+        border_lines_.push_back({startPoint3,startPoint4});
+        border_lines_.push_back({startPoint4,startPoint1});
+
+        // Setup the Player Correctly
+        player.SetX((startPoint3.x - startPoint4.x)/2);
+        player.SetY(startPoint3.y);
+        player.SetGameField(padding, padding + int(kPlayfieldWidth),padding, padding + int(kPlayfieldHeight) );
+
+
 }
+
+
 
 void Game::Run(Controller const &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
@@ -33,7 +42,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, player);
     Update();
-    renderer.Render(player, lines);
+    renderer.Render(player, border_lines_);
 
     frame_end = SDL_GetTicks();
 
@@ -59,10 +68,14 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 }
 
 
+
+
 void Game::Update() {
   if (!player.alive) return;
-
+  
   player.Update();
+  
+  
 
 }
 

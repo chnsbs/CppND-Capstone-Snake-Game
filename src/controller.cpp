@@ -4,7 +4,7 @@
 #include "player.h"
 
 void Controller::ChangeDirection(Player &player, Player::Direction input) const {
-  //if (snake.direction != opposite || snake.size == 1) snake.direction = input;
+  player.SetDirection(input);
   return;
 }
 
